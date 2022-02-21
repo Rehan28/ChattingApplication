@@ -8,21 +8,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class Server extends JFrame implements ActionListener {
+public class Client extends JFrame implements ActionListener {
     JPanel p1;
     JTextField t1;
     JButton b1;
     static JTextArea a1;
-    static ServerSocket stk;
     static Socket s;
     static DataInputStream din;
     static DataOutputStream dout;
 
-    Server(){
+    Client(){
         p1 = new JPanel();
         p1.setLayout(null);
         p1.setBackground(new Color(7,94,84));
@@ -43,7 +41,7 @@ public class Server extends JFrame implements ActionListener {
             }
         });
 
-        ImageIcon i4= new ImageIcon(ClassLoader.getSystemResource("com/Chatting/icons/1.png"));
+        ImageIcon i4= new ImageIcon(ClassLoader.getSystemResource("com/Chatting/icons/2.png"));
         Image i5 = i4.getImage().getScaledInstance(45,45,Image.SCALE_DEFAULT);
         ImageIcon i6 = new ImageIcon(i5);
         JLabel l2 = new JLabel(i6);
@@ -73,7 +71,7 @@ public class Server extends JFrame implements ActionListener {
 
         //lebel
 
-        JLabel l3 = new JLabel("Rehan");
+        JLabel l3 = new JLabel("Moana");
         l3.setFont(new Font("SAN_SERIF",Font.BOLD,18));
         l3.setForeground(Color.WHITE);
         l3.setBounds(95,6,100,15);
@@ -112,24 +110,21 @@ public class Server extends JFrame implements ActionListener {
         getContentPane().setBackground(Color.WHITE);
         setLayout(null);
         setSize(300,500);
-        setLocation(300,150);
+        setLocation(800,150);
         setUndecorated(true);
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        new Server().setVisible(true);
-        String InputMessage ="";
+        new Client().setVisible(true);
+        String InputMesssage = "";
         try {
-          stk = new ServerSocket(6001);
-          s = stk.accept();
-          din = new DataInputStream(s.getInputStream());
-          dout = new DataOutputStream(s.getOutputStream());
-          InputMessage = din.readUTF();
-          a1.setText(a1.getText()+"\n"+InputMessage);
+            s = new Socket("127.0.0.1",6001);
+            din = new DataInputStream(s.getInputStream());
+            dout = new DataOutputStream(s.getOutputStream());
+            InputMesssage = din.readUTF();
+            a1.setText(a1.getText()+"\n"+InputMesssage);
 
-          stk.close();
-          s.close();
 
         }catch (Exception e){
 
@@ -138,15 +133,15 @@ public class Server extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-      try {
-          String out = t1.getText();
-          a1.setText(a1.getText()+"\n\t\t"+out);
-          t1.setText("");
-          dout.writeUTF(out);
+        try {
+            String out = t1.getText();
+            a1.setText(a1.getText()+"\n\t\t"+out);
+            dout.writeUTF(out);
+            t1.setText("");
+        }catch (Exception e){
 
-      }catch (Exception e){
+        }
 
-      }
 
     }
 }
